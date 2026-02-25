@@ -1,0 +1,19 @@
+{
+    "Group": "skylarkblue1",
+    "Name": "HytaleAP",
+    "Version": "0.0.0",
+    "Description": "Archipelago implementation for Hytale",
+    "Authors": [
+        {
+            "Name": "skylarkblue1",
+            "Url": "https://your-website.com"
+        }
+    ],
+    "Website": "https://github.io/",
+    "DisabledByDefault": false,
+    "IncludesAssetPack": false,
+    "Dependencies": {},
+    "OptionalDependencies": {},
+    "ServerVersion": "2026.02.19-1a311a592",
+    "Main": "io.github.skylarkblue1.HytaleAP"
+}

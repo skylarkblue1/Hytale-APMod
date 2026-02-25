@@ -1,2 +1,3 @@
-# HytaleAPMod
-Archipelago implementation mod for Hytale
+# Hytale Archipelago Mod
+
+WIP

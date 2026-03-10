@@ -9,9 +9,6 @@ plugins {
     id("dev.scaffoldit") version "0.2.+"
 }
 
-// Would you like to do a split project?
-// Create a folder named "common", then configure details with `common { }`
-
 hytale {
     usePatchline("release")
     useVersion("latest")

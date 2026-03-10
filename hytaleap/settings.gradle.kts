@@ -1,3 +1,7 @@
+import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.mavenCentral
+import org.gradle.kotlin.dsl.repositories
+
 rootProject.name = "HytaleArchipelago"
 
 plugins {
@@ -14,11 +18,11 @@ hytale {
 
 
     repositories {
-        // Any external repositories besides: MavenLocal, MavenCentral, HytaleMaven, and CurseMaven
+        mavenCentral()
     }
 
     dependencies {
-        // Any external dependency you also want to include
+        implementation("io.github.archipelagomw:Java-Client:0.2.1")
     }
 
     manifest {

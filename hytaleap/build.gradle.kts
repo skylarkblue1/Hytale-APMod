@@ -2,10 +2,17 @@
  * NOTE: This is entirely optional and basics can be done in `settings.gradle.kts`
  */
 
+plugins {
+    id("com.gradleup.shadow") version "9.3.2"
+}
+
 repositories {
-    // Any external repositories besides: MavenLocal, MavenCentral, HytaleMaven, and CurseMaven
+    mavenCentral()
 }
 
 dependencies {
-    // Any external dependency you also want to include
+    implementation("io.github.archipelagomw:Java-Client:0.2.1")
+}
+
+tasks.shadowJar {
 }

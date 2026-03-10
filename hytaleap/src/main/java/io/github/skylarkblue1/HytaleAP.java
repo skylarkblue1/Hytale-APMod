@@ -5,6 +5,7 @@ import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.packets.interaction.SyncInteractionChains;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.event.events.player.PlayerChatEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.io.adapter.PacketFilter;
@@ -12,9 +13,12 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.Message;
-import io.github.skylarkblue1.commands.ExampleCommand;
+
+import io.github.skylarkblue1.commands.APConnect;
+import io.github.skylarkblue1.commands.APDisconnect;
+import io.github.skylarkblue1.events.APChatListener;
 import io.github.skylarkblue1.events.ExampleEvent;
+
 import java.util.Arrays;
 import javax.annotation.Nonnull;
 
@@ -28,6 +32,7 @@ public class HytaleAP extends JavaPlugin {
 
     protected void setup() {
         PacketAdapters.registerInbound((PacketFilter) (handler, packet) -> {
+
 // This whole if statement doesn't trigger anymore.
 //            if (ply != null) {
 //                ply.sendMessage(Message.raw("Reading Packet"));
@@ -55,6 +60,9 @@ public class HytaleAP extends JavaPlugin {
         PacketAdapters.registerOutbound((PacketFilter) (handler, packet) -> {
             String handlerName = handler.getClass().getSimpleName();
             String packetName = packet.getClass().getSimpleName();
+
+// This breaks with the new FTU memories screen - unknown if it's still broken if there's a custom UI that opsns but will need a hell of a lot more testing. Likely, just use mixins to change memories.
+
 //    if (packet.getId() == 218 || packet.getId() == 216 || packet.getId() == 200) { // Blocks memories page from opening
 //        ((HytaleLogger.Api)LOGGER.atInfo()).log("[" + handlerName + "] Sent packet id=" + packet.getId() + ": " + packetName);
 //        if (packet instanceof CustomPage) {
@@ -69,7 +77,25 @@ public class HytaleAP extends JavaPlugin {
 
             return false;
         });
-        this.getCommandRegistry().registerCommand(new ExampleCommand("example", "An example command"));
+
+        PacketAdapters.registerOutbound((PacketFilter) (handler, packet) -> false);
+
+        // Register the archipelago commands
+        APConnect connectCommand = new APConnect();
+        getCommandRegistry().registerCommand(connectCommand);
+        getCommandRegistry().registerCommand(new APDisconnect(connectCommand));
+
         this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, ExampleEvent::onPlayerReady);
+
+        // Register the archipelago chat listener
+        APChatListener chatListener = new APChatListener(connectCommand);
+        this.getEventRegistry().registerAsyncGlobal(
+                PlayerChatEvent.class,
+                future -> future.thenApply(event -> {
+                    chatListener.onPlayerChat(event);
+                    return event;
+                })
+        );
+
     }
 }
